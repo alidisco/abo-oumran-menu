@@ -341,11 +341,13 @@ body {
 }
 
 .item-price {
-  font-size: clamp(1.15rem, 2.5vw, 1.35rem);
+  font-size: clamp(1.08rem, 2.4vw, 1.26rem);
   font-weight: 800;
   color: var(--gold-dark);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 .item-controls {

@@ -1,15 +1,15 @@
-// Menu items exact to the restaurant poster
+// Menu items exact to the restaurant poster (prices in L.L)
 const MENU_ITEMS = [
-  { id: "hummus-madkouk", name: "حمص مدقوق", price: 200, category: "plates" },
-  { id: "hummus-tahina", name: "حمص بطحينة", price: 200, category: "plates" },
-  { id: "foul-hamod", name: "فول بحامض", price: 200, category: "plates" },
-  { id: "foul-tahina", name: "فول بطحينة", price: 200, category: "plates" },
-  { id: "fatteh", name: "فتة", price: 250, category: "plates" },
-  { id: "malayzie", name: "ماليزية", price: 250, category: "plates", isNew: true },
-  { id: "box-half", name: "علبة نص كيلو", price: 180, category: "boxes" },
-  { id: "box-kilo", name: "علبة كيلو", price: 350, category: "boxes" },
-  { id: "safri-plate", name: "صحن سفري", price: 250, category: "boxes" },
-  { id: "juice", name: "عصير", price: 50, category: "drinks" },
+  { id: "hummus-madkouk", name: "حمص مدقوق", price: 200000, category: "plates" },
+  { id: "hummus-tahina", name: "حمص بطحينة", price: 200000, category: "plates" },
+  { id: "foul-hamod", name: "فول بحامض", price: 200000, category: "plates" },
+  { id: "foul-tahina", name: "فول بطحينة", price: 200000, category: "plates" },
+  { id: "fatteh", name: "فتة", price: 250000, category: "plates" },
+  { id: "malayzie", name: "ماليزية", price: 250000, category: "plates", isNew: true },
+  { id: "box-half", name: "علبة نص كيلو", price: 180000, category: "boxes" },
+  { id: "box-kilo", name: "علبة كيلو", price: 350000, category: "boxes" },
+  { id: "safri-plate", name: "صحن سفري", price: 250000, category: "boxes" },
+  { id: "juice", name: "عصير", price: 50000, category: "drinks" },
 ];
 
 // Restaurant phone in international format for WhatsApp (Lebanon 03/478350 -> 9613478350)
@@ -92,6 +92,10 @@ function clearCart() {
   showToast("تم تفريغ السلة");
 }
 
+function formatPrice(amount) {
+  return `${amount.toLocaleString("en-US")}L.L`;
+}
+
 function formatArabicCount(count) {
   if (count === 1) return "صنف واحد";
   if (count === 2) return "صنفان";
@@ -129,7 +133,8 @@ function renderMenu() {
 
     const priceSpan = document.createElement("span");
     priceSpan.className = "item-price";
-    priceSpan.textContent = item.price;
+    priceSpan.dir = "ltr";
+    priceSpan.textContent = formatPrice(item.price);
 
     const controlsDiv = document.createElement("div");
     controlsDiv.className = "item-controls";
@@ -184,8 +189,8 @@ function renderCartDrawer() {
 
   topCartCountEl.textContent = totalQty;
   stickyCountEl.textContent = formatArabicCount(totalQty);
-  stickyTotalEl.textContent = totalPrice;
-  drawerTotalEl.textContent = totalPrice;
+  stickyTotalEl.textContent = formatPrice(totalPrice);
+  drawerTotalEl.textContent = formatPrice(totalPrice);
 
   if (totalQty === 0) {
     stickyCartBarEl.classList.add("hidden");
@@ -215,7 +220,7 @@ function renderCartDrawer() {
 
     const meta = document.createElement("div");
     meta.className = "cart-item-meta";
-    meta.textContent = `${entry.qty} × ${entry.price} = ${entry.subtotal}`;
+    meta.textContent = `${entry.qty} × ${formatPrice(entry.price)} = ${formatPrice(entry.subtotal)}`;
     details.append(title, meta);
 
     const actions = document.createElement("div");
@@ -262,10 +267,10 @@ function buildOrderMessage() {
 
   const lines = ["السلام عليكم، طلب جديد من قائمة *مطعم أبو عمران*:", ""];
   entries.forEach((item, index) => {
-    lines.push(`${index + 1}. ${item.name} × ${item.qty} = ${item.subtotal}`);
+    lines.push(`${index + 1}. ${item.name} × ${item.qty} = ${formatPrice(item.subtotal)}`);
   });
   lines.push("");
-  lines.push(`*المجموع الكلي:* ${totalPrice}`);
+  lines.push(`*المجموع الكلي:* ${formatPrice(totalPrice)}`);
   lines.push(`*نوع الطلب:* ${orderType}`);
   if (name) lines.push(`*الاسم:* ${name}`);
   if (orderType === "ديلفري" && address) lines.push(`*العنوان:* ${address}`);
